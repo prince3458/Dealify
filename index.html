@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealify</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="Découvrez les meilleures offres et produits en affiliation 1TPE sur Dealify. Promotions exclusives et trouvailles uniques.">
+    <meta name="keywords" content="Dealify, 1TPE, affiliation, offres spéciales, promotions, e-commerce, produits numériques">
+    <meta name="author" content="Dealify">
+    
+    <style>
+        :root {
+            --light-bg: #ffffff;
+            --light-text: #2c3e50;
+            --light-card-bg: #f8f9fa;
+            --light-border: #dee2e6;
+            --light-primary: #3498db;
+            --light-primary-hover: #2980b9;
+            --light-shadow: rgba(0, 0, 0, 0.1);
+
+            --dark-bg: #2c3e50;
+            --dark-text: #ecf0f1;
+            --dark-card-bg: #34495e;
+            --dark-border: #566573;
+            --dark-primary: #3498db;
+            --dark-primary-hover: #5dade2;
+            --dark-shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-border);
+            margin-bottom: 30px;
+        }
+        body.dark-mode header { border-bottom-color: var(--dark-border); }
+        .logo { font-size: 1.8em; font-weight: bold; color: var(--light-primary); }
+        body.dark-mode .logo { color: var(--dark-primary); }
+
+        .header-controls { display: flex; align-items: center; gap: 20px; }
+        .lang-switcher, .theme-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: var(--light-text);
+        }
+        body.dark-mode .lang-switcher, body.dark-mode .theme-toggle { color: var(--dark-text); }
+        .lang-switcher span:not(.active) { opacity: 0.5; }
+
+        /* --- Slider --- */
+        #slider-container {
+            width: 110%;
+            aspect-ratio: 16 / 7;
+            max-height: 400px;
+            overflow: hidden;
+            position: relative;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            background-color: var(--light-card-bg);
+        }
+        body.dark-mode #slider-container { background-color: var(--dark-card-bg); }
+        #slider { display: flex; transition: transform 0.5s ease-in-out; height: 100%; }
+        .slide { flex: 0 0 100%; height: 100%; }
+        .slide a, .slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .slide img {
+            object-fit: contain; /* CRITICAL REQUIREMENT */
+        }
+        .slider-nav {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        .slider-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .slider-dot.active { background-color: #fff; }
+
+        /* --- Search & Filter --- */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: var(--light-card-bg);
+            border: 1px solid var(--light-border);
+            border-radius: 8px;
+        }
+        body.dark-mode .filters {
+            background-color: var(--dark-card-bg);
+            border-color: var(--dark-border);
+        }
+        .filters input, .filters select {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--light-border);
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+        body.dark-mode .filters input, body.dark-mode .filters select {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+
+        /* --- Product Grid --- */
+        h2.section-title {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 50px;
+        }
+        #product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+}
+       .product-card {
+    background-color: var(--light-card-bg);
+    border: 1px solid var(--light-border);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+.product-card-image {
+    width: 100%;
+    aspect-ratio: 16/9; /* image plus large et moderne */
+}
+.product-card-content {
+    padding: 20px;
+}
+.product-name {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+}
+
+.product-description {
+    font-size: 1em;
+    font-weight: normal;
+    color: #555;
+    margin-bottom: 15px;
+}
+body.dark-mode .product-description {
+    color: #ccc;
+}
+        body.dark-mode .product-card {
+            background-color: var(--dark-card-bg);
+            border-color: var(--dark-border);
+            box-shadow: 0 6px 12px var(--dark-shadow);
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px var(--light-shadow);
+        }
+        body.dark-mode .product-card:hover {
+            box-shadow: 0 10px 20px var(--dark-shadow);
+        }
+        .product-card-image {
+            width: 100%;
+            aspect-ratio: 4 / 3; /* More space for image */
+            background-color: #fff;
+        }
+        .product-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-card-content {
+            padding: 10px; /* Increased padding */
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-name {
+            font-size: 1.25em; /* Larger font */
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .product-btn {
+            display: inline-block;
+            background-color: var(--white-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .product-btn:hover { background-color: var(--light-primary-hover); }
+        body.dark-mode .product-btn { background-color: var(--dark-primary); }
+        body.dark-mode .product-btn:hover { background-color: var(--dark-primary-hover); }
+
+        /* --- Contact Form --- */
+        #contact-form-section {
+            padding: 40px 0;
+            background-color: var(--light-card-bg);
+        }
+        body.dark-mode #contact-form-section { background-color: var(--dark-card-bg); }
+        #contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: grid;
+            gap: 15px;
+        }
+        #contact-form input, #contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid var(--light-border);
+            font-size: 16px;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+        body.dark-mode #contact-form input, body.dark-mode #contact-form textarea {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+        #contact-form textarea { resize: vertical; min-height: 120px; }
+        #contact-form button {
+            background-color: var(--light-primary);
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #contact-form button:hover { background-color: var(--light-primary-hover); }
+        body.dark-mode #contact-form button { background-color: var(--dark-primary); }
+        body.dark-mode #contact-form button:hover { background-color: var(--dark-primary-hover); }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 25px;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+        }
+        .toast.show { opacity: 1; visibility: visible; transform: translate(-50%, -20px); }
+        .toast.success { background-color: #2ecc71; }
+        .toast.error { background-color: #e74c3c; }
+
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <div class="logo">Dealify</div>
+        <div class="header-controls">
+            <button class="lang-switcher" id="lang-switcher">
+                <span class="active" data-lang="fr">FR</span> / <span data-lang="en">EN</span>
+            </button>
+            <button class="theme-toggle" id="theme-toggle">☀️</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Slider Section -->
+        <section id="slider-container">
+            <div id="slider"></div>
+            <div id="slider-nav" class="slider-nav"></div>
+        </section>
+        
+        <!-- Search & Filter Section -->
+        <section class="filters">
+            <input type="search" id="search-input" data-lang-key="searchPlaceholder" placeholder="Rechercher un produit...">
+            <select id="category-filter">
+                <option value="all" data-lang-key="allCategories">Toutes les catégories</option>
+            </select>
+        </section>
+
+        <!-- Product Grid Section -->
+        <section>
+            <h2 class="section-title" data-lang-key="productsTitle">Nos Produits</h2>
+            <div id="product-grid">
+                <!-- Products will be injected here by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Contact Form Section -->
+    <section id="contact-form-section">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="contactTitle">Contactez-nous</h2>
+            <form id="contact-form">
+                <input type="text" id="contact-name" name="name" required data-lang-key="namePlaceholder" placeholder="Votre Nom">
+                <input type="text" id="contact-whatsapp" name="whatsapp" required data-lang-key="whatsappPlaceholder" placeholder="WhatsApp (ex: +2250700000000)">
+                <input type="email" id="contact-email" name="email" required data-lang-key="emailPlaceholder" placeholder="Votre Email">
+                <textarea id="contact-message" name="message" required data-lang-key="messagePlaceholder" placeholder="Votre Message"></textarea>
+                <button type="submit" data-lang-key="submitButton">Envoyer</button>
+            </form>
+        </div>
+    </section>
+    
+    <div id="toast" class="toast"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+
+        // VOS IDENTIFIANTS FIREBASE ICI
+        const firebaseConfig = {
+  apiKey: "AIzaSyAsNG86PvM5t_14RIG0yw4xkXBt-beGqwA",
+  authDomain: "new-prototype-u959m.firebaseapp.com",
+  databaseURL: "https://new-prototype-u959m-default-rtdb.firebaseio.com",
+  projectId: "new-prototype-u959m",
+  storageBucket: "new-prototype-u959m.firebasestorage.app",
+  messagingSenderId: "1040559497575",
+  appId: "1:1040559497575:web:280b5ca9f3bbb187884fc2",
+  measurementId: "G-7VRG8CH0F0"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- State ---
+        let allProducts = [];
+        let allCategories = {};
+        let currentSlide = 0;
+        let slideInterval;
+        let sliderItems = [];
+        const translations = {
+            fr: {
+                searchPlaceholder: "Rechercher un produit...",
+                allCategories: "Toutes les catégories",
+                productsTitle: "Nos Produits",
+                contactTitle: "Contactez-nous",
+                namePlaceholder: "Votre Nom",
+                whatsappPlaceholder: "WhatsApp (ex: +2250700000000)",
+                emailPlaceholder: "Votre Email",
+                messagePlaceholder: "Votre Message",
+                submitButton: "Envoyer",
+                contactSuccess: "Message envoyé avec succès !",
+                contactError: "Erreur. Veuillez réessayer.",
+                validationError: "Veuillez remplir tous les champs correctement.",
+                invalidWhatsapp: "Le numéro WhatsApp doit commencer par + et contenir des chiffres."
+            },
+            en: {
+                searchPlaceholder: "Search for a product...",
+                allCategories: "All Categories",
+                productsTitle: "Our Products",
+                contactTitle: "Contact Us",
+                namePlaceholder: "Your Name",
+                whatsappPlaceholder: "WhatsApp (e.g., +15551234567)",
+                emailPlaceholder: "Your Email",
+                messagePlaceholder: "Your Message",
+                submitButton: "Send",
+                contactSuccess: "Message sent successfully!",
+                contactError: "Error. Please try again.",
+                validationError: "Please fill all fields correctly.",
+                invalidWhatsapp: "The WhatsApp number must start with + and contain numbers."
+            }
+        };
+
+        // --- DOM Elements ---
+        const sliderEl = document.getElementById('slider');
+        const sliderNavEl = document.getElementById('slider-nav');
+        const productGridEl = document.getElementById('product-grid');
+        const contactForm = document.getElementById('contact-form');
+        const toast = document.getElementById('toast');
+        const themeToggle = document.getElementById('theme-toggle');
+        const langSwitcher = document.getElementById('lang-switcher');
+        const searchInput = document.getElementById('search-input');
+        const categoryFilter = document.getElementById('category-filter');
+        
+        // --- Toast Notification ---
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            setTimeout(() => { toast.className = 'toast'; }, 3000);
+        }
+
+        // --- Language & Theme ---
+        function applyLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.dataset.langKey;
+                if (translations[lang][key]) {
+                    if (el.placeholder) el.placeholder = translations[lang][key];
+                    else el.textContent = translations[lang][key];
+                }
+            });
+            localStorage.setItem('dealify-lang', lang);
+            langSwitcher.querySelectorAll('span').forEach(span => {
+                span.classList.toggle('active', span.dataset.lang === lang);
+            });
+        }
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '🌙';
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+            localStorage.setItem('dealify-theme', theme);
+        }
+        
+        langSwitcher.addEventListener('click', (e) => {
+            if (e.target.tagName === 'SPAN') {
+                applyLanguage(e.target.dataset.lang);
+            }
+        });
+        
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+
+        // --- Slider ---
+        function renderSlider() {
+            get(ref(db, 'slider')).then(snapshot => {
+                if (snapshot.exists()) {
+                    sliderItems = Object.values(snapshot.val());
+                    sliderEl.innerHTML = sliderItems.map(item => `
+                        <div class="slide">
+                            <a href="${item.url}" target="_blank" rel="noopener noreferrer">
+                                <img src="${item.image}" alt="Promotion slide">
+                            </a>
+                        </div>
+                    `).join('');
+                    sliderNavEl.innerHTML = sliderItems.map((_, i) => `<div class="slider-dot" data-index="${i}"></div>`).join('');
+                    updateSlider();
+                    startSliderInterval();
+                    sliderNavEl.querySelectorAll('.slider-dot').forEach(dot => {
+                        dot.addEventListener('click', (e) => {
+                            currentSlide = parseInt(e.target.dataset.index);
+                            updateSlider();
+                            resetSliderInterval();
+                        });
+                    });
+                }
+            });
+        }
+
+        function updateSlider() {
+            if(sliderItems.length === 0) return;
+            sliderEl.style.transform = `translateX(-${currentSlide * 100}%)`;
+            sliderNavEl.querySelectorAll('.slider-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % sliderItems.length;
+            updateSlider();
+        }
+        
+        function startSliderInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 4000);
+        }
+        
+        function resetSliderInterval() {
+            startSliderInterval();
+        }
+
+        // --- Products & Categories ---
+        async function loadData() {
+            const categoriesSnapshot = await get(ref(db, 'categories'));
+            if(categoriesSnapshot.exists()) {
+                allCategories = categoriesSnapshot.val();
+                categoryFilter.innerHTML = `<option value="all" data-lang-key="allCategories">Toutes les catégories</option>`;
+                for (const id in allCategories) {
+                    const option = document.createElement('option');
+                    option.value = id;
+                    option.textContent = allCategories[id].name;
+                    categoryFilter.appendChild(option);
+                }
+            }
+
+            const productsSnapshot = await get(ref(db, 'products'));
+            if(productsSnapshot.exists()) {
+                allProducts = Object.values(productsSnapshot.val());
+                displayProducts(allProducts);
+            }
+        }
+        
+        function displayProducts(products) {
+    productGridEl.innerHTML = '';
+    if (products.length === 0) {
+        productGridEl.innerHTML = `<p>Aucun produit trouvé.</p>`;
+        return;
+    }
+
+    products.forEach(product => {
+        const card = document.createElement('article');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <div class="product-card-image">
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
+            </div>
+            <div class="product-card-content">
+                <h3 class="product-name">${product.name}</h3>
+                <h4 class="product-description">
+                    ${product.description ? product.description : "Pas de description disponible"}
+                </h4>
+                <a href="${product.buttonUrl}" 
+                   class="product-btn" 
+                   target="_blank" 
+                   rel="noopener noreferrer">
+                   ${product.buttonText || "Voir plus"}
+                </a>
+            </div>
+        `;
+        productGridEl.appendChild(card);
+    });
+}
+        function filterAndSearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const categoryId = categoryFilter.value;
+
+            let filteredProducts = allProducts.filter(product => {
+                const matchesCategory = (categoryId === 'all' || product.categoryId === categoryId);
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesSearch;
+            });
+            
+            displayProducts(filteredProducts);
+        }
+
+        searchInput.addEventListener('input', filterAndSearch);
+        categoryFilter.addEventListener('change', filterAndSearch);
+
+        // --- Contact Form ---
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const lang = document.documentElement.lang || 'fr';
+            const name = document.getElementById('contact-name').value.trim();
+            const whatsapp = document.getElementById('contact-whatsapp').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+            
+            // Validation
+            if (!name || !whatsapp || !email || !message) {
+                showToast(translations[lang].validationError, 'error');
+                return;
+            }
+            if (!whatsapp.startsWith('+') || !/^\+[0-9]+$/.test(whatsapp)) {
+                showToast(translations[lang].invalidWhatsapp, 'error');
+                return;
+            }
+
+            const newMessage = {
+                name,
+                whatsapp,
+                email,
+                message,
+                timestamp: Date.now()
+            };
+
+            const messagesRef = ref(db, 'messages');
+            const newMessageRef = push(messagesRef);
+            set(newMessageRef, newMessage)
+                .then(() => {
+                    showToast(translations[lang].contactSuccess, 'success');
+                    contactForm.reset();
+                })
+                .catch((error) => {
+                    console.error("Firebase error:", error);
+                    showToast(translations[lang].contactError, 'error');
+                });
+        });
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('dealify-theme') || 'light';
+            const savedLang = localStorage.getItem('dealify-lang') || 'fr';
+            
+            applyTheme(savedTheme);
+            applyLanguage(savedLang);
+
+            renderSlider();
+            loadData();
+        });
+    </script>
+</body>
+</html>
